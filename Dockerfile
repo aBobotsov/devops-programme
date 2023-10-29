@@ -3,7 +3,10 @@ FROM ubuntu:22.04
 RUN apt-get update \ 
     && apt-get install -y --no-install-recommends \
     python3 \
-    python3-pip
+    python3-pip \
+    && mkdir /app \
+    && useradd -d /app app-user \
+    && chown --recursive app-user /app
 
 # Since requirements changes are less frequent
 COPY requirements.txt /app/requirements.txt
@@ -15,5 +18,8 @@ WORKDIR /app
 
 # App running on default Flask port - 5000
 EXPOSE 5000
+
+# switch further instructions context to non-root user
+USER app-user
 
 CMD [ "python3", "app.py" ]
