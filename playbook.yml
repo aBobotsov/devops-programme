@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+  gather_facts: no
+  become: no
+
+  vars:
+    image_name: aleksandar-demo-app
+    image_tag: v0.1
+    listen_port: 5000
+
+  tasks:
+    - name: Build image
+      docker_image:
+        name: "{{ image_name }}"
+        build:
+          path: ./
+        tag: "{{ image_tag }}"
+        source: build
+      register: image_build_result
+
+    - name: Push Image to registry
+      docker_image:
+        name: "{{ image_name }}:{{ image_tag }}"
+        repository: "abobotsov/flask-demo-app"
+        tag: "{{ image_tag }}"
+        push: true
+        source: local
+
+    - name: Run Docker container
+      docker_container:
+        name: flask-demo-app
+        image: "{{ image_name }}:{{ image_tag }}"
+        state: started
+        ports:
+          - "{{ listen_port }}:{{ listen_port }}"
+        # WIP since for some reason curl isn't installed
+        healthcheck:
+          test: ["CMD", "curl", "--fail", "localhost:5000"]
+          interval: 30s
+          timeout: 5s
+          retries: 3
+          start_period: 5s
