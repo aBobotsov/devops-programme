@@ -5,16 +5,25 @@
   become: no
 
   vars:
-    image_name: aleksandar-demo-app
-    image_tag: v0.1
+    image_name: "aleksandar-demo-app"
+    image_tag: "v0.2"
     listen_port: 5000
+    app_dir: "/tmp/{{ image_name }}"
+    repo_version: "main"
 
   tasks:
+    - name: Shallow checkout repo
+      git:
+        repo: git@github.com:aBobotsov/devops-programme.git
+        dest: "{{ app_dir }}"
+        version: "{{ repo_version }}"
+        depth: 1 # shallow checkout
+
     - name: Build image
       docker_image:
         name: "{{ image_name }}"
         build:
-          path: ./../
+          path: "{{ app_dir }}"
         tag: "{{ image_tag }}"
         source: build
       register: image_build_result
