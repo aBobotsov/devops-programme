@@ -4,6 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
+    curl \
     && mkdir /app \
     && useradd -d /app app-user \
     && chown --recursive app-user /app
