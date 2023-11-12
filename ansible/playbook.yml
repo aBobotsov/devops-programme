@@ -11,6 +11,10 @@
     app_dir: "/tmp/{{ image_name }}"
     repo_version: "main"
 
+
+  vars_files:
+    - ansible_vault.yaml
+
   tasks:
     - name: Shallow checkout repo
       git:
