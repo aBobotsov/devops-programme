@@ -27,24 +27,58 @@ jobs:
           pip install -r requirements.txt || { echo "Failed to install dependencies" ; exit 1; }
           echo "Current directory: $(pwd)"
           echo "Contents of the directory: $(ls -a)"
+      
+      - name: Save artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifacts
+          path: . 
 
   Pylint:
     needs: Build
     runs-on: ubuntu-latest
     steps:      
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifacts
+          path: .
+          
       - name: Run pylint
         run: |
           echo "Current directory: $(pwd)"
           echo "Contents of the directory: $(ls -a)"
           pylint $(git ls-files '*.py')
-        if: success()
   
   Format:
     needs: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifacts
+          path: .
+
       - name: Run black formatter
         uses: rickstaa/action-black@v1
         with:
           black_args: ". --check"
-        if: success()
+
+  Markdown-lint:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifacts
+          path: .
+
+      - name: Lint with Markdown-lint
+        uses: articulate/actions-markdownlint@v1
+        with:
+          config: .markdownlint.json
+          files: '**/*.md'
+          ignore: node_modules
+          version: 0.28.1
