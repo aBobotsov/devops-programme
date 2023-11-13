@@ -1,0 +1,17 @@
+name: GitHub Actions Practice
+run-name: Testing a bunch of stuff 
+on: 
+  push:
+    branches-ignore:
+    - main
+
+jobs:
+  Checkout-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: editorconfig-checker/action-editorconfig-checker@main
+      - run: editorconfig-checker/action-editorconfig-checker
+  
