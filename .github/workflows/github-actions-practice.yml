@@ -35,6 +35,6 @@ jobs:
           pylint $(git ls-files '*.py')
 
       - name: Run black formatter
-        uses: rickstaa/action-black@v4
+        uses: rickstaa/action-black@v1
         with:
           black_args: ". --check"
