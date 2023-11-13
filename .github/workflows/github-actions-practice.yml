@@ -6,15 +6,12 @@ on:
     - main
 
 jobs:
-  Checkout:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-  Dependencies:
-    runs-on: ubuntu-latest
-    steps:
       - name: Setup python
       # will resolve python version from .python-version file
         uses: actions/setup-python@v4
@@ -32,6 +29,7 @@ jobs:
           echo "Contents of the directory: $(ls -a)"
 
   Pylint:
+    needs: Build
     runs-on: ubuntu-latest
     steps:      
       - name: Run pylint
@@ -42,6 +40,7 @@ jobs:
         if: success()
   
   Format:
+    needs: Build
     runs-on: ubuntu-latest
     steps:
       - name: Run black formatter
