@@ -11,7 +11,7 @@ pip install -r requirements.txt
 - Ansible vault pass - ask for it :) 
 
 ## Ansible playbook
- The playbook utilises the following variables:
+The playbook utilises the following variables:
 
 - `app_dir` - the directory where the app code will be checked-out
 - `repo_version` - a valid branch, hash or tag of the app code - e.g. `HEAD`, `my-feature-branch` 
