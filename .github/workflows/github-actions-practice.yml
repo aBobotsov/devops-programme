@@ -6,7 +6,7 @@ on:
     - main
 
 jobs:
-  Build:
+  Check-editorconfig:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -19,6 +19,17 @@ jobs:
       - uses: editorconfig-checker/action-editorconfig-checker@main
       - name: Editor config check
         run: editorconfig-checker
+      
+
+  Pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup python
+      # will resolve python version from .python-version file
+        uses: actions/setup-python@v4
 
       - name: Install dependencies
         run: |
@@ -26,39 +37,18 @@ jobs:
           pip install pylint
           pip install -r requirements.txt || { echo "Failed to install dependencies" ; exit 1; }
           echo "Current directory: $(pwd)"
-          echo "Contents of the directory: $(ls -a)"
-      
-      - name: Save artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifacts
-          path: . 
-
-  Pylint:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:      
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: my-artifacts
-          path: .
-          
+          echo "Contents of the directory: $(ls -a)"      
       - name: Run pylint
         run: |
           echo "Current directory: $(pwd)"
           echo "Contents of the directory: $(ls -a)"
           pylint $(git ls-files '*.py')
   
-  Format:
-    needs: Build
+  Black:
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: my-artifacts
-          path: .
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Run black formatter
         uses: rickstaa/action-black@v1
@@ -66,15 +56,11 @@ jobs:
           black_args: ". --check"
 
   Markdown-lint:
-    needs: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: my-artifacts
-          path: .
-
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        
       - name: Lint with Markdown-lint
         uses: articulate/actions-markdownlint@v1
         with:
