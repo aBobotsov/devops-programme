@@ -114,5 +114,9 @@ jobs:
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
+          echo "Current directory: $(pwd)"
+          echo "Contents of the directory: $(ls -a)"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Github token: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          echo "Sonar token: ${{ secrets.SONAR_TOKEN }}
