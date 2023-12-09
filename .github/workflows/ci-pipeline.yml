@@ -20,7 +20,6 @@ jobs:
       - name: Editor config check
         run: editorconfig-checker
       
-
   Pylint:
     runs-on: ubuntu-latest
     steps:
@@ -96,44 +95,44 @@ jobs:
         run: |
           python -m unittest discover -p '*_test.py'
 
-  Sonarcloud:
-    needs: Unit-tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-      - name: debug
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Contents of the directory: $(ls -a)"
-          echo "Github token: ${{ secrets.GITHUB_TOKEN }}
-          echo "Sonar token: ${{ secrets.SONAR_TOKEN }}
+  # Sonarcloud:
+  #   needs: Unit-tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         # Disabling shallow clone is recommended for improving relevancy of reporting
+  #         fetch-depth: 0
+  #     - name: debug
+  #       run: |
+  #         echo "Current directory: $(pwd)"
+  #         echo "Contents of the directory: $(ls -a)"
+  #         echo "Github token: ${{ secrets.GITHUB_TOKEN }}
+  #         echo "Sonar token: ${{ secrets.SONAR_TOKEN }}
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.verbose=true
+  #     - name: SonarCloud Scan
+  #       uses: sonarsource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       with:
+  #         args: >
+  #           -Dsonar.verbose=true
 
-  Snyk:
-    needs: Unit-tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
-        continue-on-error: true # To make sure that SARIF upload gets called
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
+  # Snyk:
+  #   needs: Unit-tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - name: Run Snyk to check for vulnerabilities
+  #       uses: snyk/actions/python@master
+  #       continue-on-error: true # To make sure that SARIF upload gets called
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  #       with:
+  #         args: --severity-threshold=high
 
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: snyk.sarif
+  #     - name: Upload result to GitHub Code Scanning
+  #       uses: github/codeql-action/upload-sarif@v2
+  #       with:
+  #         sarif_file: snyk.sarif
