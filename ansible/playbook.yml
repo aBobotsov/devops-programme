@@ -1,5 +1,5 @@
 ---
-- name: Build, push and run Docker image
+- name: Shallow checkout, Build, push and run Docker image
   hosts: localhost
   gather_facts: no
   become: no
@@ -18,6 +18,16 @@
         dest: "{{ app_dir }}"
         version: "{{ repo_version }}"
         depth: 1 # shallow checkout
+
+    # to avoid reading it for every task
+    - name: Read Ansible vault
+      include_vars:
+        file: ansible_vault.yaml
+
+    - name: Dockerhub authentication
+      docker_login:
+        username: "{{ dockerhub_username }}" 
+        password: "{{ dockerhub_password }}"
 
     - name: Build image
       docker_image:
