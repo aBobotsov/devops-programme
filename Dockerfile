@@ -10,7 +10,7 @@ RUN apt-get update \
     && chown --recursive app-user /app
 
 # Since requirements changes are less frequent
-COPY requirements.txt /app/requirements.txt
+COPY app/requirements.txt /app/requirements.txt
 RUN pip3 install -r app/requirements.txt
 
 # Copy just the app w/o the test
