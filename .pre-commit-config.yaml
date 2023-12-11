@@ -11,9 +11,9 @@ repos:
       - id: check-merge-conflict
       - id: debug-statements
       # - id: double-quote-string-fixer
-
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.29.0
-    hooks:
-      - id: yamllint
-        args: ['-d {extends: relaxed, rules: {line-length: disable}}', '-s']
+  # too invasive
+  # - repo: https://github.com/adrienverge/yamllint.git
+  #   rev: v1.29.0
+  #   hooks:
+  #     - id: yamllint
+  #       args: ['-d {extends: relaxed, rules: {line-length: disable}}', '-s']
