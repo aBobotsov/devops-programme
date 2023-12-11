@@ -41,7 +41,7 @@
     - name: Push Image to registry
       docker_image:
         name: "{{ image_name }}:{{ image_tag }}"
-        repository: "abobotsov/flask-demo-app"
+        repository: "abobotsov/devops-practice"
         tag: "{{ image_tag }}"
         push: true
         source: local

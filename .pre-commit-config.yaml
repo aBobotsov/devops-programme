@@ -1,0 +1,19 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0  # Specify the desired version of Gitleaks
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: debug-statements
+      # - id: double-quote-string-fixer
+  # too invasive
+  # - repo: https://github.com/adrienverge/yamllint.git
+  #   rev: v1.29.0
+  #   hooks:
+  #     - id: yamllint
+  #       args: ['-d {extends: relaxed, rules: {line-length: disable}}', '-s']
